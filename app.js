@@ -7,7 +7,7 @@ const app = express()
 const dotenv = require('dotenv');
 dotenv.config();
 const config = require('config');
-mongoose.connect('mongodb://' + config.get('mongodb.address') + '/' + config.get('mongodb.dbname'), { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(`mongodb+srv://${config.get('mongodb.username')}:${config.get('mongodb.password')}@${config.get('mongodb.clusterUrl')}/${config.get('mongodb.dbname')}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 require('./utils/initializer').init()
 
 app.use('/api', require('./routes/stores'));
