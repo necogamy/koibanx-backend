@@ -3,10 +3,15 @@ const mongoose = require('mongoose');
 const StoreSchema = new mongoose.Schema({
   name: String,
   cuit: String,
-  concepts: Array,
+  conceptOne: String,
+  conceptTwo: String,
+  conceptThree: String,
+  conceptFour: String,
+  conceptFive: String,
+  conceptSix: String,
   currentBalance: Number,
   active: Boolean,
-  lastSale: Date,
+  lastSale: Date
 },{ timestamps: true });
 
 StoreSchema.pre('save', async function (callback) {

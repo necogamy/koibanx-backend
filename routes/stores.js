@@ -4,4 +4,6 @@ const storesController = require('../controllers/stores.controller');
 
 router.get('/stores', storesController.getStores);
 
+router.post('/stores', storesController.newStore);
+
 module.exports = router;
