@@ -13,7 +13,8 @@
         
         user/username: test@koibanx.com
         pass/password: test123
-+ Endpoint: POST | GET: /api/stores
++ Endpoint: POST | GET | DELETE: /api/stores
++ Endpoint: DELETE | PUT: /api/stores/:id
 
 *
 * Para probar los tests: *npm test*
@@ -23,6 +24,7 @@
 * Si bien traté de respetar la estructura con la que me encontré, cambié cosas para poder concretar la tarea sin problemas por mi cuenta.
 * A pesar de lo anterior, seguí el documento que se me brindó al pie de la letra. Por lo que, se cumplen todos los requisitos.
 + Cambié la forma de conectar la base de datos, usando MongoDB Atlas.
++ Tanto los tests como la API en sí están testeados en localhost.
 
 ## **Archivo .env**
 DATABASE_USERNAME=koibanx   

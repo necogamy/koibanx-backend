@@ -1,13 +1,14 @@
 const errorHandler = (err, req, res, next) => {
     // Response by errors
     switch (err.name) {
-        case "NotFoundError":
+        case 'CastError':
+        case 'NotFoundError':
             res.status(404);
             break;
-        case "BadRequest":
+        case 'BadRequest':
             res.status(400);
             break;
-        case "AuthorizationError":
+        case 'AuthorizationError':
             res.status(401);
             break;
         default:

@@ -111,7 +111,11 @@ controller.newStore = async (req, res, next) => {
             throw err;
         }
 
-        res.status(201).json(store);
+        const payload = {
+            message: 'Store created successfully',
+            data: store
+        }
+        res.status(201).json(payload);
     } catch (err) {
         next(err);
     }
@@ -128,22 +132,23 @@ controller.deleteAllStores = async (req, res, next) => {
 
 controller.deleteStore = async (req, res, next) => {
     try {
-        const findStore = await StoreModel.findOne({ _id: req.params.id });
-        if (!findStore) {
-            err = new Error('Store doesn\'t exists');
-            err.name = 'NotFoundError';
-            throw err;
-        }
+        const { id } = req.params;
 
-        const deleteStore = await StoreModel.deleteOne({ _id: req.params.id });
+        // If there's an error then it automatically throws the error
+        const deleteStore = await StoreModel.deleteOne({ _id: id });
         res.status(200).send('Deleted the store successfully');
     } catch (err) {
+        if (err.name === 'CastError') {
+            err = new Error('Store doesn\'t exists');
+            err.name = 'NotFoundError';
+        }
         next(err);
     }
 }
 
 controller.updateStore = async (req, res, next) => {
     try {
+        const { id } = req.params;
         const { name, cuit, conceptOne, currentBalance, active, lastSale } = req.body;
 
         if (![ name, cuit, conceptOne, currentBalance, lastSale ].every(Boolean)) {
@@ -152,12 +157,8 @@ controller.updateStore = async (req, res, next) => {
             throw err;
         }
 
-        const findStore = await StoreModel.findOne({ _id: req.params.id });
-        if (!findStore) {
-            err = new Error('Store doesn\'t exists');
-            err.name = 'NotFoundError';
-            throw err;
-        }
+        // If there's an error then it automatically throws the error
+        const findStore = await StoreModel.findOne({ _id: id });
 
         const toUpdate = {
             name,
@@ -173,9 +174,13 @@ controller.updateStore = async (req, res, next) => {
         if (req.body.conceptFive) toUpdate.conceptFive = req.body.conceptFive;
         if (req.body.conceptSix) toUpdate.conceptSix = req.body.conceptSix;
 
-        const updateStore = await StoreModel.updateOne({ _id: req.params.id }, toUpdate);
+        const updateStore = await StoreModel.updateOne({ _id: id }, toUpdate);
         res.status(200).send('Update the store successfully');
     } catch (err) {
+        if (err.name === 'CastError') {
+            err = new Error('Store doesn\'t exists');
+            err.name = 'NotFoundError';
+        }
         next(err);
     }
 }

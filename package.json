@@ -6,7 +6,8 @@
   "scripts": {
     "run": "node $NODE_DEBUG_OPTION app.js",
     "start": "node app.js",
-    "dev:start": "nodemon app.js"
+    "dev:start": "nodemon app.js",
+    "test": "mocha test/"
   },
   "author": "",
   "license": "ISC",

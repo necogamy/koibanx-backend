@@ -4,11 +4,11 @@ const bcrypt = require('bcrypt-nodejs');
 const logger = require('../utils/logger');
 
 const basicAuth = async (req, res, next) => {
-    const koibanxTestUser = 'test@koibanx.com';
-    logger.info('Middleware: Basic Auth');
-    let err;
-
     try {
+        const koibanxTestUser = 'test@koibanx.com';
+        logger.info('Middleware: Basic Auth');
+        let err;
+
         const user = await auth(req);
         if (!user) {
             err = new Error('Access Denied');
@@ -23,16 +23,16 @@ const basicAuth = async (req, res, next) => {
             if (!response || err) {
                 err = new Error('Access Denied');
                 err.name = 'AuthorizationError';
-                throw err;
             }
         });
 
         if (storedUser.username !== user.name) {
             err = new Error('Access Denied');
             err.name = 'AuthorizationError';
-            throw err;
         }
     
+        if (err) throw err;
+
         // If basic auth ok:
         logger.info('Basic Auth: success');
         next();
