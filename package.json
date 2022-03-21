@@ -23,6 +23,8 @@
     "winston": "~2.4.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "mocha": "^9.2.2",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   }
 }

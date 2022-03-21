@@ -8,7 +8,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const config = require('config');
 
-/* Choose connection, it's active the mongo atlas db */
+/* Choose connection, it's active the mongo atlas db, and remember .env config */
 mongoose.connect(`mongodb+srv://${config.get('mongodb.username')}:${config.get('mongodb.password')}@${config.get('mongodb.clusterUrl')}/${config.get('mongodb.dbname')}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 // mongoose.connect('mongodb://' + config.get('mongodb.address') + '/' + config.get('mongodb.dbname'), { useNewUrlParser: true, useUnifiedTopology: true });
 
