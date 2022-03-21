@@ -72,7 +72,7 @@ controller.newStore = async (req, res, next) => {
         const { name, cuit, conceptOne, currentBalance, active, lastSale } = req.body;
         let err;
         
-        if (![ name, cuit, conceptOne, currentBalance, active, lastSale ].every(Boolean)) {
+        if (![ name, cuit, conceptOne, currentBalance, lastSale ].every(Boolean)) {
             err = new Error('All fields must be filled');
             err.name = 'BadRequest';
             throw err;
@@ -112,6 +112,69 @@ controller.newStore = async (req, res, next) => {
         }
 
         res.status(201).json(store);
+    } catch (err) {
+        next(err);
+    }
+}
+
+controller.deleteAllStores = async (req, res, next) => {
+    try {
+        const deleteAll = await StoreModel.deleteMany({});
+        res.status(200).send('Deleted all stores successfully');
+    } catch (err) {
+        next(err);
+    }
+}
+
+controller.deleteStore = async (req, res, next) => {
+    try {
+        const findStore = await StoreModel.findOne({ _id: req.params.id });
+        if (!findStore) {
+            err = new Error('Store doesn\'t exists');
+            err.name = 'NotFoundError';
+            throw err;
+        }
+
+        const deleteStore = await StoreModel.deleteOne({ _id: req.params.id });
+        res.status(200).send('Deleted the store successfully');
+    } catch (err) {
+        next(err);
+    }
+}
+
+controller.updateStore = async (req, res, next) => {
+    try {
+        const { name, cuit, conceptOne, currentBalance, active, lastSale } = req.body;
+
+        if (![ name, cuit, conceptOne, currentBalance, lastSale ].every(Boolean)) {
+            err = new Error('All fields must be filled');
+            err.name = 'BadRequest';
+            throw err;
+        }
+
+        const findStore = await StoreModel.findOne({ _id: req.params.id });
+        if (!findStore) {
+            err = new Error('Store doesn\'t exists');
+            err.name = 'NotFoundError';
+            throw err;
+        }
+
+        const toUpdate = {
+            name,
+            cuit,
+            conceptOne,
+            currentBalance,
+            active,
+            lastSale
+        }
+        if (req.body.conceptTwo) toUpdate.conceptTwo = req.body.conceptTwo;
+        if (req.body.conceptThree) toUpdate.conceptThree = req.body.conceptThree;
+        if (req.body.conceptFour) toUpdate.conceptFour = req.body.conceptFour;
+        if (req.body.conceptFive) toUpdate.conceptFive = req.body.conceptFive;
+        if (req.body.conceptSix) toUpdate.conceptSix = req.body.conceptSix;
+
+        const updateStore = await StoreModel.updateOne({ _id: req.params.id }, toUpdate);
+        res.status(200).send('Update the store successfully');
     } catch (err) {
         next(err);
     }

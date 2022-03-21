@@ -5,7 +5,7 @@ exports.init = async function () {
     let user = new User();
 
     if (await User.countDocuments({"username": "test@koibanx.com"})) {
-        console.log('Test user test@koibanx.com it\'s available');
+        logger.info('Test user test@koibanx.com it\'s available');
     } else {
         user.username = 'test@koibanx.com';
         user.password = 'test123';

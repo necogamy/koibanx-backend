@@ -1,10 +1,11 @@
 const auth = require('basic-auth');
 const UserModel = require('../models/user');
 const bcrypt = require('bcrypt-nodejs');
+const logger = require('../utils/logger');
 
 const basicAuth = async (req, res, next) => {
     const koibanxTestUser = 'test@koibanx.com';
-    console.log('Middleware: Basic Auth');
+    logger.info('Middleware: Basic Auth');
     let err;
 
     try {
@@ -33,11 +34,11 @@ const basicAuth = async (req, res, next) => {
         }
     
         // If basic auth ok:
-        console.log('Basic Auth: success');
+        logger.info('Basic Auth: success');
         next();
     } catch (err) {
         // If there's an authorization error, then will enter here
-        console.log('Basic Auth: failure');
+        logger.info('Basic Auth: failure');
         next(err);
     }
 }
