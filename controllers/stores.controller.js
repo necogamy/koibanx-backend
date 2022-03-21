@@ -6,12 +6,30 @@ controller.getStores = async (req, res) => {
     try {
         const { q } = req.query;
         let allStores;
+
+        const payload = {
+            data: [],
+            page: 0,
+            pages: 0,
+            limit: 0,
+            total: 0
+        }
         
         if (q) {
             const queries = JSON.parse(q);
+            const limit = queries.limit ? queries.limit : 0;
+            const nPerPage = 100;
+            const page = queries.page && queries.page > 0 ? queries.page : 0;
+            const pagination = page > 0 ? page * nPerPage : 0;
+
             allStores = await StoreModel
                 .find()
-                .limit(queries.limit ? queries.limit : 0);
+                .limit(limit)
+                .skip(pagination);
+
+            payload.limit = limit;
+            payload.page = page;
+            payload.pages = pagination;
         } else {
             allStores = await StoreModel.find();
         }
@@ -21,7 +39,7 @@ controller.getStores = async (req, res) => {
             const currency = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' })
                 .format(store.currentBalance);
 
-            const payload = {
+            const storePayload = {
                 'ID': store.id,
                 'Comercio': store.name,
                 'CUIT': store.cuit,
@@ -32,21 +50,17 @@ controller.getStores = async (req, res) => {
             }
 
             for (const i in store) {
-                if (/concept/.test(i)) payload['Conceptos'].push(store[i]);
+                if (/concept/.test(i)) storePayload['Conceptos'].push(store[i]);
             }
 
-            payload['Conceptos'] = payload['Conceptos'].filter(concepto => concepto);
+            storePayload['Conceptos'] = storePayload['Conceptos'].filter(concepto => concepto);
 
-            return payload;
+            return storePayload;
         });
-        
-        const payload = {
-            data: allStores,
-            page: 0,
-            pages: 0,
-            limit: 0,
-            total: 0
-        }
+
+        // Send payload
+        payload.data = allStores;
+        payload.total = allStores.length;
         res.status(200).json(payload);
     } catch (err) {
         console.error(err);
